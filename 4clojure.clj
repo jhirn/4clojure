@@ -31,5 +31,11 @@
                (map-indexed 
                 #(if (not= 0 (rem (inc %1)  n))%2)
                     xs))))
+;; #42-factorial
+(def factoral
+     (fn [n]
+       #(apply * (range 1 (inc %)))))
 
-
+;; #43-Reverse interleave
+(def reverse-interleave (fn [n coll] 
+  (map #(take-nth n (drop % coll)) (range n))))
