@@ -39,3 +39,8 @@
 ;; #43-Reverse interleave
 (def reverse-interleave (fn [n coll] 
   (map #(take-nth n (drop % coll)) (range n))))
+
+;; #49-Split Sequence
+(def split-sequence
+     (fn [n coll]
+       [(take n coll) (drop n coll)]))
