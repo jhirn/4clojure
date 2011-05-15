@@ -65,7 +65,7 @@
 ;; #66 Greatest Common Divisior
 (def gcd
      (fn [x y]
-     "This one short circuits"
+       "This one short circuits"
        ( if  (= 0 (rem (max x y) (min x y)))
          (min x y)
          (loop [n 1
@@ -75,3 +75,24 @@
              (if (= 0 (rem x n) (rem y n))
                (recur (inc n) n)
                (recur (inc n) greatest)))))))
+
+;; #83 Half-Truth
+(def half-truth 
+     (fn [& n]
+       (= 2 (count (distinct n)))))
+
+;; #65 Intro to Reduce
+(def safe-empty-add-reduce
+     (fn
+       "Learned var arg functions to handle empty sequences to reduce"
+       ([] 0)
+       ( [s n] (+ s n))))
+
+;; #63 Group a Sequence
+(def group-seq
+     (fn [f coll]
+       "Does this really need the reverse?"
+       (reduce (fn [map item]
+                 (let [result (f item)
+                       entry (map result)]
+                   (assoc map result (cons item entry)))) {} (reverse coll))))
