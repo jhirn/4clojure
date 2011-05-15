@@ -44,3 +44,14 @@
 (def split-sequence
      (fn [n coll]
        [(take n coll) (drop n coll)]))
+;; #61-map-construct
+(def map-construct
+     (fn [xs ys]
+       (loop [k (seq xs)
+              v (seq ys)
+              the-map {}]
+         (if (and k v)
+           (recur (next k)
+                  (next v)
+                  (assoc the-map (first k)(first v)))
+           the-map))))
