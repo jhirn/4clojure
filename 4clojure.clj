@@ -96,3 +96,23 @@
                  (let [result (f item)
                        entry (map result)]
                    (assoc map result (cons item entry)))) {} (reverse coll))))
+
+;;46 flipping out
+(def flip-args
+     (fn [f]
+       (fn [x y] (f y x))))
+
+;; # 44 Rotate Sequence
+(def rotate-seq
+     (fn [n coll]
+       (let [c (count coll)]
+         (take c (drop (mod n c) (cycle coll))))))
+
+;; #50 Split by type
+(def split-by-type
+     "This one taught me lack of need for reverse via conj on vector"
+     (fn [coll]
+       (vals (reduce #(let [type-vector (get %1 (type %2) []) ]
+                  (assoc %1 (type %2) (conj type-vector %2)))
+               {}
+               coll))))
