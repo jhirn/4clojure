@@ -100,6 +100,15 @@
                     new-run
                     new-longest))))))
 
+;; #55 Count Ocurences
+(def count-occurences
+     (fn [coll]
+       "Use the cool transients from (fn frequencies)"
+       (reduce (fn [count-map item]
+                 (assoc count-map item ( inc (get count-map item 0))))
+               {}
+               coll)))
+
 ;; #61 Map-construct
 (def map-construct
      (fn [xs ys]
@@ -154,7 +163,32 @@
 ;; #83 Half-Truth
 (def half-truth 
      (fn [& n]
+       "Could short circuit, but feels slick"
        (= 2 (count (distinct n)))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
