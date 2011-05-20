@@ -109,6 +109,15 @@
                {}
                coll)))
 
+;; #55 Find Distinct Items
+(def distinct-items
+     (fn [coll]
+       "radically wack compared to distinct"
+       (reduce
+        #(if (nil?(some #{%2} %1))
+           (conj %1 %2)
+           %1) [] coll)))
+
 ;; #61 Map-construct
 (def map-construct
      (fn [xs ys]
