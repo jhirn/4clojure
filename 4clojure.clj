@@ -100,6 +100,16 @@
                     new-run
                     new-longest))))))
 
+;; #54 Partition a Sequence
+(def partition-sequence
+     (fn [n coll]
+       (loop [s coll
+              ret []]
+         (let [next-part (take n s)]
+           (if (= n (count next-part))
+             (recur (drop n s) (conj ret next-part))
+             ret)))))
+
 ;; #55 Count Ocurences
 (def count-occurences
      (fn [coll]
@@ -117,6 +127,7 @@
         #(if (nil?(some #{%2} %1))
            (conj %1 %2)
            %1) [] coll)))
+
 
 ;; #61 Map-construct
 (def map-construct
