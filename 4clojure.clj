@@ -127,13 +127,22 @@
         #(if (nil?(some #{%2} %1))
            (conj %1 %2)
            %1) [] coll)))
-
+;; #58
+(def function-comp
+     (fn [& fns]
+       (fn [& args]
+         (let [reversed-functions (reverse fns)]
+           (loop [funs (rest reversed-functions)
+                  x (apply (first reversed-functions) args)]
+           (if (first funs)
+                 (recur (rest funs) ((first funs) x))
+                 x))))))
 
 ;; #61 Map-construct
 (def map-construct
      (fn [xs ys]
        (loop [k (seq xs)
-              v (seq ys)
+              v (seq ys)a
               the-map {}]
          (if (and k v)
            (recur (next k)
