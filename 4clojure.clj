@@ -133,10 +133,25 @@
        (fn [& args]
          (let [reversed-functions (reverse fns)]
            (loop [funs (rest reversed-functions)
-                  x (apply (first reversed-functions) args)]
+                  val (apply (first reversed-functions) args)]
            (if (first funs)
-                 (recur (rest funs) ((first funs) x))
-                 x))))))
+                 (recur (rest funs) ((first funs) val))
+                 val))))))
+
+;; #59
+(def juxtaposition
+     (fn [& fns]
+       (fn [& args]
+         (do
+           (println args)
+           (println fns)
+           (reduce #(conj %1 (apply %2 args)) [] fns)))))
+
+;;#60
+;; (def seq-reducitons
+;;      (fn this [f x]
+;;        (lazy-seq
+;;         (cons (aco)))))
 
 ;; #61 Map-construct
 (def map-construct
@@ -188,6 +203,17 @@
              (if (= 0 (rem x n) (rem y n))
                (recur (inc n) n)
                (recur (inc n) greatest)))))))
+
+;; #81 Intersection
+(def intersection
+     (fn [coll1 coll2]
+       (if (< (count coll1) (count coll2))
+         (recur coll2 coll1)
+         (reduce #(if (contains? coll2 %2)
+                    (conj %1 %2)
+                    %1)
+                 #{}
+                 coll1))))
 
 ;; #83 Half-Truth
 (def half-truth 
