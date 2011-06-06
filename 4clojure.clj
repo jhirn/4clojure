@@ -1,9 +1,10 @@
 (ns user)
 
 ;; #26 Fibonacci
-(def my-fib #(take % 
-                   (map first 
-                        (iterate (fn [[x y]] [y (+ x y)]) [1 1]))))
+(def my-fib
+     #(take % 
+            (map first 
+                 (iterate (fn [[x y]] [y (+ x y)]) [1 1]))))
 ;; #38 Max
 (def my-max
      (fn this ([x] x)
@@ -81,7 +82,7 @@
 ;; #53 Longest Increasing Sub-Seq
 (def longest-inc-sub-seq
      (fn [coll]
-       "Ripe for refactoring!!!"
+       "Ripe for refactoring!!!" ()
        (loop [s coll
               current (first s)
               current-run [(Integer/MAX_VALUE)]
@@ -134,9 +135,9 @@
          (let [reversed-functions (reverse fns)]
            (loop [funs (rest reversed-functions)
                   val (apply (first reversed-functions) args)]
-           (if (first funs)
-                 (recur (rest funs) ((first funs) val))
-                 val))))))
+             (if (first funs)
+               (recur (rest funs) ((first funs) val))
+               val))))))
 
 ;; #59
 (def juxtaposition
@@ -148,16 +149,25 @@
            (reduce #(conj %1 (apply %2 args)) [] fns)))))
 
 ;;#60
-;; (def seq-reducitons
-;;      (fn this [f x]
-;;        (lazy-seq
-;;         (cons (aco)))))
+(def seq-reducitons
+     (fn this
+       ([f coll]
+          (lazy-seq
+           (if-let [s (seq coll)]
+             (this f (first s) (rest s))
+             (list (f)))))
+       ([f init coll]
+          (cons init
+                (lazy-seq
+                 (when-let [s (seq coll)]
+                   (this f (f init (first s)) (rest s))))))))
+
 
 ;; #61 Map-construct
 (def map-construct
      (fn [xs ys]
        (loop [k (seq xs)
-              v (seq ys)a
+              v (seq ys)
               the-map {}]
          (if (and k v)
            (recur (next k)
@@ -203,6 +213,53 @@
              (if (= 0 (rem x n) (rem y n))
                (recur (inc n) n)
                (recur (inc n) greatest)))))))
+
+;; #67 Primes
+;; how to recur as below from within, had to crapily use range instead
+;; of range
+(def primes-up
+     (fn [n]
+     (take n (lazy-cat
+                (cons 2 ((fn rest-primes [next-prime]
+                           (let [potential-divisiors (range 2 next-prime)
+                                 n (inc next-prime)]
+                             (if (some #(zero? (rem next-prime %)) potential-divisiors)
+                             (recur n)
+                              (lazy-cat (cons next-prime (rest-primes n)))))) 3))))))
+
+(def primes
+       (lazy-cat
+                (cons 2 ((fn rest-primes [next-prime]
+                           (let [potential-divisiors (take-while #(<= (* % %) next-prime) primes)
+                                 n (inc next-prime)]
+                             (if (some #(zero? (rem next-prime %)) potential-divisiors)
+                             (recur n)
+                             (lazy-cat (cons next-prime (rest-primes n)))))) 3))))
+
+
+
+;; #70
+(def word-sort
+     (fn [s]
+       (sort-by #(.toLowerCase %)
+                (re-seq #"[A-Za-z]+" s))))
+
+
+
+;; #74 perfect squares
+(def perfect-squares
+     (fn [coll]
+       (apply str
+              (interpose
+               ","
+               (filter
+                #(let [sqrt (Math/sqrt (Integer/parseInt %1))]
+                   (= 0 (- sqrt (Math/floor sqrt))))
+                (re-seq #"[0-9]+" coll))))))
+
+
+
+
 
 ;; #81 Intersection
 (def intersection
