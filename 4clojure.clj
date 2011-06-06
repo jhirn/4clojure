@@ -219,24 +219,37 @@
 ;; of range
 (def primes-up
      (fn [n]
-     (take n (lazy-cat
+       (take n (lazy-cat
                 (cons 2 ((fn rest-primes [next-prime]
                            (let [potential-divisiors (range 2 next-prime)
                                  n (inc next-prime)]
                              (if (some #(zero? (rem next-prime %)) potential-divisiors)
-                             (recur n)
-                              (lazy-cat (cons next-prime (rest-primes n)))))) 3))))))
+                               (recur n)
+                               (lazy-cat (cons next-prime (rest-primes n)))))) 3))))))
 
 (def primes
-       (lazy-cat
-                (cons 2 ((fn rest-primes [next-prime]
-                           (let [potential-divisiors (take-while #(<= (* % %) next-prime) primes)
-                                 n (inc next-prime)]
-                             (if (some #(zero? (rem next-prime %)) potential-divisiors)
-                             (recur n)
-                             (lazy-cat (cons next-prime (rest-primes n)))))) 3))))
+     (lazy-cat
+      (cons 2 ((fn rest-primes [next-prime]
+                 (let [potential-divisiors (take-while #(<= (* % %) next-prime) primes)
+                       n (inc next-prime)]
+                   (if (some #(zero? (rem next-prime %)) potential-divisiors)
+                     (recur n)
+                     (lazy-cat (cons next-prime (rest-primes n)))))) 3))))
 
 
+;; 69 merge-with
+(def merge-with-fn
+     (fn [f & maps]
+       (when (first maps)
+         (letfn [(merge-entry [m e] 
+                             (let [k (key e)
+                                   v (val e)]
+                               (if (contains? m k)
+                                 (assoc m k (f (get m k) v))
+                                 (assoc m k v))))
+               (merge2 [m1 m2]
+                        (reduce merge-entry (or m1 {}) (seq m2)))]
+           (reduce merge2 maps)))))
 
 ;; #70
 (def word-sort
@@ -262,7 +275,7 @@
 (def perfect-number?
      (fn [n]
        (let [divisiors (filter #(zero? (rem n %)) (range 1 n))]
-           (= n (apply + divisiors)))))
+         (= n (apply + divisiors)))))
 
 
 ;; #81 Intersection
