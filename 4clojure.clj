@@ -258,7 +258,11 @@
                 (re-seq #"[0-9]+" coll))))))
 
 
-
+;; #80 Perfectnumbers
+(def perfect-number?
+     (fn [n]
+       (let [divisiors (filter #(zero? (rem n %)) (range 1 n))]
+           (= n (apply + divisiors)))))
 
 
 ;; #81 Intersection
