@@ -1,4 +1,4 @@
-(ns user)
+(ns fourclj.fourclj)
 
 ;; #26 Fibonacci
 (def my-fib
